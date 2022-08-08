@@ -29,15 +29,15 @@ export default {
 	methods: {
 		async login() {
 			const form = { ...this.form };
-			axios
+			const token = await axios
 				.post("/api/login", form)
 				.then((r) => {
 					console.log(r.data.token);
 					this.$store.commit("setToken", r.data.token);
 				})
 				.catch((e) => console.log(e));
-
-			await this.form.email;
+			token;
+			await axios.get("/api/user").then((r) => console.log(r));
 		},
 	},
 	computed: {
