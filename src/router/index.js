@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import login from "../views/LoginView.vue";
+import store from "../store";
 
 const routes = [
 	{
@@ -22,6 +23,7 @@ const routes = [
 		name: "dashboard",
 		component: () =>
 			import(/* webpackChunkName: "about" */ "../views/DashboardView.vue"),
+		meta: { requireAuth: true },
 	},
 	{
 		path: "/login",
@@ -33,6 +35,14 @@ const routes = [
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
 	routes,
+});
+
+router.beforeEach((to, from, next) => {
+	if (to.meta.requireAuth && !store.state.token) {
+		next({ name: "login" });
+	} else {
+		next();
+	}
 });
 
 export default router;
