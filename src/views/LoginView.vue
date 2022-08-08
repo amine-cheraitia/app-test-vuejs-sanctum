@@ -24,20 +24,35 @@ export default {
 				email: "",
 				password: "",
 			},
+			a: "Authorization",
 		};
 	},
 	methods: {
 		async login() {
 			const form = { ...this.form };
-			const token = await axios
+			let login = false;
+			await axios
 				.post("/api/login", form)
 				.then((r) => {
 					console.log(r.data.token);
 					this.$store.commit("setToken", r.data.token);
+					login = true;
 				})
 				.catch((e) => console.log(e));
-			token;
-			await axios.get("/api/user").then((r) => console.log(r));
+
+			if (login) {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${this.$store.getters.getToken}`,
+					},
+				};
+				axios
+					.get("/api/user", config)
+					.then((r) => {
+						console.log(r.data);
+					})
+					.catch((r) => console.log(r));
+			}
 		},
 	},
 	computed: {
