@@ -50,6 +50,7 @@ export default {
 					.get("/api/user", config)
 					.then((r) => {
 						console.log(r.data);
+						this.$store.commit("setUser", r.data);
 					})
 					.catch((r) => console.log(r));
 			}

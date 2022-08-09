@@ -3,10 +3,30 @@
 		<router-link to="/">Home</router-link> |
 		<router-link to="/about">About</router-link> |
 		<router-link to="/dashboard">Dashboard </router-link> |
-		<router-link to="/login">Login </router-link>
+
+		<router-link v-if="isAuth" to="" @click="logout">Logout</router-link>
+		<router-link v-else to="/login">Login </router-link>
 	</nav>
 	<router-view />
 </template>
+<script>
+export default {
+	methods: {
+		logout() {
+			this.$store.dispatch("logout");
+		},
+	},
+	created() {
+		this.$store.dispatch("tryLogin");
+	},
+	computed: {
+		isAuth() {
+			console.log("est il login ? " + this.$store.getters.getIsAuth);
+			return this.$store.getters.getIsAuth;
+		},
+	},
+};
+</script>
 
 <style>
 #app {
